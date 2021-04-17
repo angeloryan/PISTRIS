@@ -13,7 +13,7 @@ SPEED = 5
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 
 
-def draw_window():
+def draw_window(avatar):
     WIN.fill(SCREEN_COLOR)
     WIN.blit(SHARK_IMAGE, (300,100))
 
