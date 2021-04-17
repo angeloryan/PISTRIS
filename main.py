@@ -12,11 +12,12 @@ BORDER = pygame.Rect(WIDTH - 5, 0, 10, HEIGHT)
 SPEED = 5
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
+BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 
-
-def draw_window(avatar):
+def draw_window(avatar, bottle):
     WIN.fill(SCREEN_COLOR)
-    WIN.blit(SHARK_IMAGE, (avatar.x,avatar.y))
+    WIN.blit(SHARK_IMAGE, (avatar.x, avatar.y))
+    WIN.blit(BOTTLE_IMAGE, (100, 0))
 
     pygame.display.update()
 
@@ -34,18 +35,20 @@ def main():
     clock = pygame.time.Clock()
     run = True
 
-    avatar = pygame.Rect(200,300, 50, 50)
+    avatar = pygame.Rect(200, 300, 50, 50)
+    bottle = pygame.Rect(100, 100, 10, 10)
 
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        draw_window(avatar)
+        draw_window(avatar, bottle)
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(keys_pressed, avatar)
 
     pygame.QUIT()
+
 
 
 if __name__ == "__main__":
