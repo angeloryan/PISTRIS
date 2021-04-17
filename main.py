@@ -4,12 +4,11 @@ import os
 
 # Screen Variables
 WIDTH, HEIGHT = 900, 500
+FPS = 60
+SPEED = 5
+SCREEN_COLOR = (150, 150, 255)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("PISTRIS")
-SCREEN_COLOR = (255, 255, 255)  # White
-FPS = 60  # Frames Per Second
-BORDER = pygame.Rect(WIDTH - 5, 0, 10, HEIGHT)
-SPEED = 5
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 
@@ -21,14 +20,14 @@ def draw_window(avatar):
     pygame.display.update()
 
 def handle_avatar_movement(keys_pressed, avatar):
-    if keys_pressed[pygame.K_LEFT] and avatar.x - SPEED > 0:  # LEFT
-        avatar.x -= SPEED
-    if keys_pressed[pygame.K_RIGHT] and avatar.x + SPEED + avatar.width < BORDER.x:  # RIGHT
-        avatar.x += SPEED
-    if keys_pressed[pygame.K_UP] and avatar.y - SPEED > 0:  # UP
+    if keys_pressed[pygame.K_UP] and avatar.y > 0:  # UP
         avatar.y -= SPEED
-    if keys_pressed[pygame.K_DOWN] and avatar.y + SPEED + avatar.height < HEIGHT - 15:  # DOWN
+    if keys_pressed[pygame.K_DOWN] and avatar.y + avatar.height < HEIGHT:  # DOWN
         avatar.y += SPEED
+    if keys_pressed[pygame.K_LEFT] and avatar.x > 0:  # LEFT
+        avatar.x -= SPEED
+    if keys_pressed[pygame.K_RIGHT] and avatar.x + avatar.width < WIDTH:  # RIGHT
+        avatar.x += SPEED
 
 def main():
     clock = pygame.time.Clock()
@@ -41,6 +40,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        
         draw_window(avatar)
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(keys_pressed, avatar)
