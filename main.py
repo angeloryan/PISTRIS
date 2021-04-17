@@ -10,23 +10,24 @@ SCREEN_COLOR = (255, 255, 255)  # White
 FPS = 60  # Frames Per Second
 SPEED = 5
 
+
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 
 
 def draw_window(avatar):
     WIN.fill(SCREEN_COLOR)
-    WIN.blit(SHARK_IMAGE, (300,100))
+    WIN.blit(SHARK_IMAGE, (avatar.x, avatar.y))
 
     pygame.display.update()
 
 def handle_avatar_movement(keys_pressed, avatar):
-    if keys_pressed[pygame.K_LEFT] :  # LEFT
+    if keys_pressed[pygame.K_a] :  # LEFT
         avatar.x -= SPEED
-    if keys_pressed[pygame.K_RIGHT] :  # RIGHT
+    if keys_pressed[pygame.K_d] :  # RIGHT
         avatar.x += SPEED
-    if keys_pressed[pygame.K_UP] :  # UP
+    if keys_pressed[pygame.K_w] :  # UP
         avatar.y -= SPEED
-    if keys_pressed[pygame.K_DOWN] :  # DOWN
+    if keys_pressed[pygame.K_s] :  # DOWN
         avatar.y += SPEED
 
 def main():
@@ -40,11 +41,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        draw_window()
-    keys_pressed = pygame.key.get_pressed()
-    handle_avatar_movement(keys_pressed, avatar)
+        draw_window(avatar)
 
-    pygame.QUIT()
+        keys_pressed = pygame.key.get_pressed()
+        handle_avatar_movement(keys_pressed, avatar)
+
+    pygame.Quit()
 
 
 if __name__ == "__main__":
