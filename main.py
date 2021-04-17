@@ -12,7 +12,7 @@ FPS = 60  # Frames Per Second
 def draw_window():
     WIN.fill(SCREEN_COLOR)
     pygame.display.update()
-
+  
 
 def main():
     clock = pygame.time.Clock()
