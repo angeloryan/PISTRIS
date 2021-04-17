@@ -40,7 +40,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-    draw_window()
+        draw_window()
     keys_pressed = pygame.key.get_pressed()
     handle_avatar_movement(keys_pressed, avatar)
 
