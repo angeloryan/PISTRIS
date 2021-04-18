@@ -1,12 +1,18 @@
 # This is the main file
 import pygame
+from pygame.locals import *
 import os
 import sprites
 import LinkedList
 import random
+import pygame
+import time
+pygame.font.init()
 
 # Screen Variables
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 WIDTH, HEIGHT = 900, 500
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
 BACKGROUND_SPEED = 3
 PLAYER_SPEED = 5
@@ -14,7 +20,7 @@ SHARK_WIDTH, SHARK_HEIGHT = 100, 100
 BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
 COLLISION = pygame.USEREVENT + 1
 SCREEN_COLOR = (150, 150, 255)
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
@@ -89,8 +95,30 @@ def collision(shark, list):
 
         curr = curr.next
 
+#button vars
+# light shade of the button
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
+
+# stores the width of the
+# screen into a variable
+width = WIN.get_width()
+
+# stores the height of the
+# screen into a variable
+height = WIN.get_height()
+
+# defining a font
+smallfont = pygame.font.SysFont('Corbel', 35)
+
+# rendering a text written in
+# this font
+text = smallfont.render('quit', True, color_dark)
+
+
 def main():
     run = True
+    main_menu = True
     shark_hp = 10
     time = 0
     count = 0
@@ -105,6 +133,7 @@ def main():
 
     pygame.display.set_caption("PISTRIS")
 
+
     while run:
         clock.tick(FPS)
         time += 1
@@ -116,6 +145,22 @@ def main():
 
             if OCEAN[i] == -900:
                 OCEAN[i] = 1800
+        while main_menu:
+            # fills the screen with a color
+            WIN.fill((37, 150, 190))
+            pygame.draw.rect(WIN, color_light, [width / 2 - 75, height / 2 , 140, 40])
+            WIN.blit(text, (width / 2 - 75, height / 2))
+
+            # stores the (x,y) coordinates into
+            # the variable as a tuple
+            mouse = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.QUIT()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if width / 2 <= mouse[0] <= width / 2 + 140 and height / 2 <= mouse[1] <= height / 2 + 40:
+                        main_menu = False
+                pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -124,11 +169,12 @@ def main():
                 shark_hp -= 1
         if shark_hp <= 0:
             break
-        
+
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
         collision(shark, list)
         draw_window(list, shark, count, bob)
+
 
     pygame.QUIT()
 
