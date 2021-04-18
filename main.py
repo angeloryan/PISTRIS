@@ -21,14 +21,8 @@ OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
 
 
 # 1 = Up, 2 = Right, 3 = Down, 4 = Left
-
-BOTTLE_1 = BOTTLE_IMAGE
-BOTTLE_2 = pygame.transform.rotate(BOTTLE_IMAGE, 90)
-BOTTLE_3 = pygame.transform.rotate(BOTTLE_IMAGE, 180)
-BOTTLE_4 = pygame.transform.rotate(BOTTLE_IMAGE, 270)
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
-
-bottle = [BOTTLE_1, BOTTLE_2, BOTTLE_3, BOTTLE_4]
+BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
 
 def draw_window(list : LinkedList.LinkedList()):
     WIN.blit(OCEAN_IMAGE, (0, 0))
@@ -71,10 +65,10 @@ def main():
     list = LinkedList.LinkedList()
 
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
-    trash = sprites.Sprites(bottle[random.randint(0, 3)], pygame.Rect(random.randint(10, 500), random.randint(10, 500), 10, 10))
+    trash = sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(10, 500), random.randint(10, 500), 10, 10))
 
     for i in range(10):
-        list.push(sprites.Sprites(bottle[random.randint(0, 3)], pygame.Rect(random.randint(100, 900), random.randint(10, 600), 10, 10)))
+        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(100, 900), random.randint(10, 600), 10, 10)))
 
     list.push(trash)
     list.push(shark)
