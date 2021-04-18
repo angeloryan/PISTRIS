@@ -27,6 +27,8 @@ FONT = pygame.font.SysFont('timesnewroman', 40)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
+CLAM_IMAGE = pygame.image.load(os.path.join('assets', 'clam.png'))
+CRAB_IMAGE = pygame.image.load(os.path.join('assets', 'crab.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
 SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygame.image.load(os.path.join('assets', 'splash_1.png')), 
@@ -138,10 +140,10 @@ def main():
     pygame.display.set_caption("PISTRIS")
 
     while main_menu:
-            # fills the screen with a color
             WIN.blit(OCEAN_IMAGE, (0, 0))
-            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 75, HEIGHT / 2 - 45/2 , 140, 40])
-            WIN.blit(text, (WIDTH / 2 - 75/2, HEIGHT / 2 - 45/2))
+            WIN.blit(CLAM_IMAGE, (WIDTH/2 - 25, HEIGHT / 2 - 80))
+            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 70, HEIGHT / 2 - 45/2 , 140, 40])
+            WIN.blit(text, (WIDTH / 2 - 70/2 + 1, HEIGHT / 2 - 45/2))
 
             # stores the (x,y) coordinates into
             # the variable as a tuple
@@ -150,7 +152,7 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.QUIT()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if WIDTH / 2 - 75 <= mouse[0] <= WIDTH / 2 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
+                    if WIDTH / 2 - 70 <= mouse[0] <= WIDTH / 2 + 70 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2 + 45/2:
                         main_menu = False
                 pygame.display.update()
 
