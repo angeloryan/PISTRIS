@@ -142,8 +142,8 @@ def main():
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
     for i in range(5):
-        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
         list.push(sprites.Sprites(BAGS[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 50, 50)))
+        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
         
 
     pygame.display.set_caption("PISTRIS")
