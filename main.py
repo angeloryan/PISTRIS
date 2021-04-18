@@ -35,6 +35,7 @@ SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygam
                 pygame.image.load(os.path.join('assets', 'splash_2.png')), pygame.image.load(os.path.join('assets', 'splash_3.png'))]
 
 OCEAN = [0, 900 , 1800]
+CRAB = pygame.transform.scale(CRAB_IMAGE, (300, 300))
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
 SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
@@ -125,7 +126,7 @@ def main():
     run = True
     main_menu = True
     end_menu = False
-    shark_hp = 10
+    shark_hp = 1
     time = 0
     count = 0
     bob = False
@@ -203,10 +204,12 @@ def main():
         while end_menu:
             # fills the screen with a color
             WIN.blit(OCEAN_IMAGE, (0, 0))
-            pygame.draw.rect(WIN, color_light, [WIDTH / 1.25 - 75, HEIGHT / 2 - 45/2 , 140, 40])
-            pygame.draw.rect(WIN, color_light, [WIDTH / 4.25 - 75, HEIGHT / 2 - 45/2 , 140, 40])
-            WIN.blit(text_end_quit, (WIDTH / 1.25 - 75/2, HEIGHT / 2 - 45/2))
-            WIN.blit(text_end_play_again, (WIDTH / 4.25 - 75/2, HEIGHT / 2 - 45/2))
+            pygame.draw.rect(WIN, color_light, [WIDTH / 2 + 40, HEIGHT / 2 - 45/2 , 140, 40])
+            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 180, HEIGHT / 2 - 45/2 , 140, 40])
+            WIN.blit(text_end_quit, (WIDTH / 2 + 40 + 75/2 + 5, HEIGHT / 2 - 45/2))
+            WIN.blit(text_end_play_again, (WIDTH / 2 - 180 + 75/2 - 5, HEIGHT / 2 - 45/2))
+
+            WIN.blit(CRAB, (WIDTH/2 - 150, HEIGHT / 2 - 25))
 
             # stores the (x,y) coordinates into
             # the variable as a tuple
@@ -215,10 +218,9 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.QUIT()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if WIDTH / 1.25 - 75 <= mouse[0] <= WIDTH / 1.25 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
-                        run = False
+                    if WIDTH / 2 + 40 <= mouse[0] <= WIDTH / 2 + 180 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2 + 45 / 2:
                         pygame.QUIT()
-                    if WIDTH / 4.25 - 75 <= mouse[0] <= WIDTH / 4.25 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
+                    if WIDTH / 2 - 180 <= mouse[0] <= WIDTH / 2 - 40 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2 + 45 / 2:
                         main()
                 pygame.display.update()
 
