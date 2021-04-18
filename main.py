@@ -83,9 +83,6 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, sco
     for i in range(3):
         WIN.blit(OCEAN_IMAGE, (OCEAN[i], 0))
 
-    for i in range(25):
-        WIN.blit(WAVES[splash_stage // 7], (wave_x, i * 50))
-
     for i in range(shark_hp):
         WIN.blit(HEART_IMAGE, (HEARTS[i], 10))
 
@@ -106,6 +103,9 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, sco
                 bob = True
 
         curr = curr.next
+
+    for i in range(25):
+        WIN.blit(WAVES[splash_stage // 7], (wave_x, i * 50))
 
     WIN.blit(shark.image, (shark.get_x(), shark.get_y()))
     WIN.blit(SPLASH[splash_stage // 7], (shark.get_x() - 55, shark.get_y()))
