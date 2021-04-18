@@ -83,7 +83,7 @@ def main():
             if event.type == COLLISION:
                 shark_hp -= 1
         if shark_hp <= 0:
-            print("working!")
+            print("dead!")
             break
         
         keys_pressed = pygame.key.get_pressed()
