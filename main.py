@@ -58,6 +58,11 @@ SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.
 WAVES = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
           pygame.transform.scale(SPLASH_IMAGE[2], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[3], (100, 100))]
 
+# quotes
+QUOTES = [pygame.image.load(os.path.join('assets', 'quote-1.png')), pygame.image.load(os.path.join('assets', 'quote-2.png')), 
+                pygame.image.load(os.path.join('assets', 'quote-3.png')), pygame.image.load(os.path.join('assets', 'quote-4.png')),
+                pygame.image.load(os.path.join('assets', 'quote-5.png'))]
+
 splash_stage = 0
 wave_x = 900
 
@@ -161,7 +166,8 @@ def main():
     shark_hp = 5
     trash_list = LinkedList.LinkedList()
     clock = pygame.time.Clock()
-    
+    quote = QUOTES[random.randint(0,4)]
+
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
     for i in range(4):
@@ -246,9 +252,9 @@ def main():
             pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 180, HEIGHT / 2 - 45/2 , 140, 40])
             WIN.blit(text_end_quit, (WIDTH / 2 + 40 + 75/2 + 5, HEIGHT / 2 - 45/2))
             WIN.blit(text_end_play_again, (WIDTH / 2 - 180 + 75/2 - 5, HEIGHT / 2 - 45/2))
-
             WIN.blit(CRAB, (WIDTH/2 - 150, HEIGHT / 2 - 25))
 
+            WIN.blit(quote, (10, 10))
             # stores the (x,y) coordinates into
             # the variable as a tuple
             mouse = pygame.mouse.get_pos()
