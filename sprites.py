@@ -1,5 +1,6 @@
 import pygame
 
+# Image and hitbox in a class
 class Sprites:
     def __init__(self, image, hitbox):
         self.image = image
