@@ -17,6 +17,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
+OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
+
 
 # 1 = Up, 2 = Right, 3 = Down, 4 = Left
 
@@ -29,7 +31,7 @@ SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 bottle = [BOTTLE_1, BOTTLE_2, BOTTLE_3, BOTTLE_4]
 
 def draw_window(list : LinkedList.LinkedList()):
-    WIN.fill(SCREEN_COLOR)
+    WIN.blit(OCEAN_IMAGE, (0, 0))
 
     curr = list.head
 
@@ -68,8 +70,11 @@ def main():
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
 
-    shark = sprites.Sprites(SHARK, pygame.Rect(200, 300, SHARK_WIDTH, SHARK_HEIGHT))
+    shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
     trash = sprites.Sprites(bottle[random.randint(0, 3)], pygame.Rect(random.randint(10, 500), random.randint(10, 500), 10, 10))
+
+    for i in range(10):
+        list.push(sprites.Sprites(bottle[random.randint(0, 3)], pygame.Rect(random.randint(100, 900), random.randint(10, 600), 10, 10)))
 
     list.push(trash)
     list.push(shark)
