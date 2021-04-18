@@ -53,6 +53,9 @@ smallfont = pygame.font.SysFont('Corbel', 35)
 # rendering a text written in
 # this font
 text = smallfont.render('play', True, color_dark)
+text_end_quit = smallfont.render('exit', True, color_dark)
+text_end_play_again = smallfont.render('again', True, color_dark)
+
 
 def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, score):
     global splash_stage
@@ -121,6 +124,7 @@ def collision(shark, list, vulnerable):
 def main():
     run = True
     main_menu = True
+    end_menu = False
     shark_hp = 10
     time = 0
     count = 0
@@ -189,12 +193,34 @@ def main():
                 shark_hp -= 1
                 vulnerable = False
         if shark_hp <= 0:
-            break
+            end_menu = True
 
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
         collision(shark, list, vulnerable)
         draw_window(list, shark, count, bob, shark_hp, score)
+
+        while end_menu:
+            # fills the screen with a color
+            WIN.blit(OCEAN_IMAGE, (0, 0))
+            pygame.draw.rect(WIN, color_light, [WIDTH / 1.25 - 75, HEIGHT / 2 - 45/2 , 140, 40])
+            pygame.draw.rect(WIN, color_light, [WIDTH / 4.25 - 75, HEIGHT / 2 - 45/2 , 140, 40])
+            WIN.blit(text_end_quit, (WIDTH / 1.25 - 75/2, HEIGHT / 2 - 45/2))
+            WIN.blit(text_end_play_again, (WIDTH / 4.25 - 75/2, HEIGHT / 2 - 45/2))
+
+            # stores the (x,y) coordinates into
+            # the variable as a tuple
+            mouse = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.QUIT()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if WIDTH / 1.25 - 75 <= mouse[0] <= WIDTH / 1.25 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
+                        run = False
+                        pygame.QUIT()
+                    if WIDTH / 4.25 - 75 <= mouse[0] <= WIDTH / 4.25 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
+                        main()
+                pygame.display.update()
 
     pygame.QUIT()
 
