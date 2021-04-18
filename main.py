@@ -3,12 +3,14 @@ import pygame
 import os
 import sprites
 import LinkedList
+import random
 
 # Screen Variables
 WIDTH, HEIGHT = 900, 500
 FPS = 60
 SPEED = 5
-BOTTLE_SPEED = 1
+SHARK_WIDTH, SHARK_HEIGHT = 100, 100
+BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
 COLLISION = pygame.USEREVENT + 1
 SCREEN_COLOR = (150, 150, 255)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -16,6 +18,15 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 
+# 1 = Up, 2 = Right, 3 = Down, 4 = Left
+
+BOTTLE_1 = BOTTLE_IMAGE
+BOTTLE_2 = pygame.transform.rotate(BOTTLE_IMAGE, 90)
+BOTTLE_3 = pygame.transform.rotate(BOTTLE_IMAGE, 180)
+BOTTLE_4 = pygame.transform.rotate(BOTTLE_IMAGE, 270)
+SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
+
+bottle = [BOTTLE_1, BOTTLE_2, BOTTLE_3, BOTTLE_4]
 
 def draw_window(list : LinkedList.LinkedList()):
     WIN.fill(SCREEN_COLOR)
@@ -57,8 +68,8 @@ def main():
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
 
-    shark = sprites.Sprites(SHARK_IMAGE, pygame.Rect(200,300, 50, 50))
-    trash = sprites.Sprites(BOTTLE_IMAGE, pygame.Rect(100, 100, 10, 10))
+    shark = sprites.Sprites(SHARK, pygame.Rect(200, 300, SHARK_WIDTH, SHARK_HEIGHT))
+    trash = sprites.Sprites(bottle[random.randint(0, 3)], pygame.Rect(random.randint(10, 500), random.randint(10, 500), 10, 10))
 
     list.push(trash)
     list.push(shark)
