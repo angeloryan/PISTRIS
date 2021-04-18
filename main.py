@@ -22,7 +22,7 @@ PLAYER_SPEED = 5
 FPS = 60
 
 COLLISION = pygame.USEREVENT + 1
-HEALTH_FONT = pygame.font.SysFont('timesnewroman', 40)
+FONT = pygame.font.SysFont('timesnewroman', 40)
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -52,7 +52,7 @@ smallfont = pygame.font.SysFont('Corbel', 35)
 # this font
 text = smallfont.render('play', True, color_dark)
 
-def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
+def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, score):
     global splash_stage
     curr = list.head
 
@@ -85,8 +85,10 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
     else:
         splash_stage += 1
 
-    SHOW_AVATAR_HEALTH = HEALTH_FONT.render("Health: " + str(shark_hp),1,WHITE)
+    SHOW_AVATAR_HEALTH = FONT.render("Health: " + str(shark_hp), 1, WHITE)
     WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
+    SHOW_SCORE = FONT.render("Score: " + str(score), 1, WHITE)
+    WIN.blit(SHOW_SCORE, (700, 10))
 
     pygame.display.update()
 
@@ -122,6 +124,7 @@ def main():
     count = 0
     bob = False
     counter = 0
+    score = 0
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
     vulnerable = True
@@ -166,6 +169,10 @@ def main():
         if counter % 30 == 0:
             vulnerable = True
 
+        if time % 25 == 0:
+            score += 1
+
+
         # Scrolling background, resets background ahead if background hits fully offscreen
         for i in range(3):
             OCEAN[i] -= BACKGROUND_SPEED
@@ -185,7 +192,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
         collision(shark, list, vulnerable)
-        draw_window(list, shark, count, bob, shark_hp)
+        draw_window(list, shark, count, bob, shark_hp, score)
 
     pygame.QUIT()
 
