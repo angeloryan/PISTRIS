@@ -12,7 +12,7 @@ pygame.font.init()
 pygame.init()
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
-SHARK_WIDTH, SHARK_HEIGHT = 100, 100
+SHARK_WIDTH, SHARK_HEIGHT = 80, 80
 BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
 WIDTH, HEIGHT = 900, 500
 SCREEN_COLOR = (150, 150, 255)
@@ -30,6 +30,7 @@ SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 CLAM_IMAGE = pygame.image.load(os.path.join('assets', 'clam.png'))
 CRAB_IMAGE = pygame.image.load(os.path.join('assets', 'crab.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
+BAG_IMAGE = pygame.image.load(os.path.join('assets', 'plastic_bag.png'))
 OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
 SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygame.image.load(os.path.join('assets', 'splash_1.png')), 
                 pygame.image.load(os.path.join('assets', 'splash_2.png')), pygame.image.load(os.path.join('assets', 'splash_3.png'))]
@@ -38,6 +39,7 @@ OCEAN = [0, 900 , 1800]
 CRAB = pygame.transform.scale(CRAB_IMAGE, (300, 300))
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
+BAGS = [BAG_IMAGE, pygame.transform.rotate(BAG_IMAGE, 90), pygame.transform.rotate(BAG_IMAGE, 180), pygame.transform.rotate(BAG_IMAGE, 270)]
 SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
           pygame.transform.scale(SPLASH_IMAGE[2], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[3], (100, 100))]
 
@@ -139,8 +141,10 @@ def main():
     
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
-    for i in range(10):
+    for i in range(5):
         list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
+        list.push(sprites.Sprites(BAGS[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 50, 50)))
+        
 
     pygame.display.set_caption("PISTRIS")
 
