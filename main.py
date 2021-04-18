@@ -12,7 +12,7 @@ pygame.font.init()
 pygame.init()
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
-SHARK_WIDTH, SHARK_HEIGHT = 100, 100
+SHARK_WIDTH, SHARK_HEIGHT = 80, 80
 BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
 WIDTH, HEIGHT = 900, 500
 SCREEN_COLOR = (150, 150, 255)
@@ -31,13 +31,22 @@ CLAM_IMAGE = pygame.image.load(os.path.join('assets', 'clam.png'))
 CRAB_IMAGE = pygame.image.load(os.path.join('assets', 'crab.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
+HEART_IMAGE = pygame.image.load(os.path.join('assets', 'heart.png'))
+WRAPPER_IMAGE = pygame.image.load(os.path.join('assets', 'food_wrapper_0.png'))
+BAG_IMAGE = [pygame.image.load(os.path.join('assets', 'plastic_bag.png')), pygame.image.load(os.path.join('assets', 'plastic_bag_1.png')), 
+             pygame.image.load(os.path.join('assets', 'plastic_bag_2.png')),]
 SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygame.image.load(os.path.join('assets', 'splash_1.png')), 
                 pygame.image.load(os.path.join('assets', 'splash_2.png')), pygame.image.load(os.path.join('assets', 'splash_3.png'))]
 
 OCEAN = [0, 900 , 1800]
+HEARTS = [10, 60, 110, 160, 210,]
 CRAB = pygame.transform.scale(CRAB_IMAGE, (300, 300))
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
+WRAPPERS = [WRAPPER_IMAGE, pygame.transform.rotate(WRAPPER_IMAGE, 90), pygame.transform.rotate(WRAPPER_IMAGE, 180), pygame.transform.rotate(WRAPPER_IMAGE, 270)]
+BAGS = [BAG_IMAGE[0], pygame.transform.rotate(BAG_IMAGE[0], 90), pygame.transform.rotate(BAG_IMAGE[0], 180), pygame.transform.rotate(BAG_IMAGE[0], 270),
+        BAG_IMAGE[1], pygame.transform.rotate(BAG_IMAGE[1], 90), pygame.transform.rotate(BAG_IMAGE[1], 180), pygame.transform.rotate(BAG_IMAGE[1], 270),
+        BAG_IMAGE[2], pygame.transform.rotate(BAG_IMAGE[2], 90), pygame.transform.rotate(BAG_IMAGE[2], 180), pygame.transform.rotate(BAG_IMAGE[2], 270)]
 SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
           pygame.transform.scale(SPLASH_IMAGE[2], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[3], (100, 100))]
 
@@ -65,6 +74,9 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, sco
     for i in range(3):
         WIN.blit(OCEAN_IMAGE, (OCEAN[i], 0))
 
+    for i in range(shark_hp):
+        WIN.blit(HEART_IMAGE, (HEARTS[i], 10))
+
     while curr:
         WIN.blit(curr.data.image, (curr.data.get_x(), curr.data.get_y()))
         curr.data.set_x(-BACKGROUND_SPEED)
@@ -91,8 +103,8 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, sco
     else:
         splash_stage += 1
 
-    SHOW_AVATAR_HEALTH = FONT.render("Health: " + str(shark_hp), 1, WHITE)
-    WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
+    # SHOW_AVATAR_HEALTH = FONT.render("Health: " + str(shark_hp), 1, WHITE)
+    # WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
     SHOW_SCORE = FONT.render("Score: " + str(score), 1, WHITE)
     WIN.blit(SHOW_SCORE, (700, 10))
 
@@ -126,21 +138,24 @@ def main():
     run = True
     main_menu = True
     end_menu = False
-    shark_hp = 1
-    time = 0
-    count = 0
-    bob = False
-    counter = 0
-    score = 0
-    clock = pygame.time.Clock()
-    list = LinkedList.LinkedList()
     vulnerable = True
     start = True
+    bob = False
+    time = 0
+    count = 0
+    counter = 0
+    score = 0
+    shark_hp = 5
+    trash_list = LinkedList.LinkedList()
+    clock = pygame.time.Clock()
     
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
-    for i in range(10):
-        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
+    for i in range(5):
+        trash_list.push(sprites.Sprites(BAGS[random.randint(0, 11)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 50, 50)))
+        trash_list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
+        trash_list.push(sprites.Sprites(WRAPPERS[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
+        
 
     pygame.display.set_caption("PISTRIS")
 
@@ -198,8 +213,8 @@ def main():
 
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
-        collision(shark, list, vulnerable)
-        draw_window(list, shark, count, bob, shark_hp, score)
+        collision(shark, trash_list, vulnerable)
+        draw_window(trash_list, shark, count, bob, shark_hp, score)
 
         while end_menu:
             # fills the screen with a color
