@@ -33,6 +33,16 @@ def draw_window(list : LinkedList.LinkedList()):
 
     while curr:
         WIN.blit(curr.data.image, (curr.data.get_x(), curr.data.get_y()))
+
+        if curr.data.image is SHARK:
+            if curr.data.get_x() < 0:
+                curr.data.set_x(-BACKGROUND_SPEED)
+        else:
+            curr.data.set_x(-BACKGROUND_SPEED)
+
+            if curr.data.get_x() < -10:
+                curr.data.set_x(random.randint(10, 910) + WIDTH)
+                curr.data.hitbox.y = (random.randint(10, 450))
         curr = curr.next
 
     pygame.display.update()
@@ -68,12 +78,10 @@ def main():
     list = LinkedList.LinkedList()
 
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
-    trash = sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(10, 500), random.randint(10, 500), 10, 10))
 
     for i in range(10):
-        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(100, 900), random.randint(10, 600), 10, 10)))
+        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(300, 900), random.randint(10, 600), 10, 10)))
 
-    list.push(trash)
     list.push(shark)
     pygame.display.set_caption("PISTRIS")
 
@@ -81,6 +89,7 @@ def main():
         clock.tick(FPS)
         time += 1
 
+        # Scrolling background, resets background ahead if background hits fully offscreen
         for i in range(3):
             OCEAN[i] -= BACKGROUND_SPEED
 
