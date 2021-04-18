@@ -49,8 +49,8 @@ def draw_window(list : LinkedList.LinkedList(), shark_hp):
                 curr.data.hitbox.y = (random.randint(10, 450))
         curr = curr.next
 
-        SHOW_AVATAR_HEALTH = HEALTH_FONT.render("Health: " + str(shark_hp),1,WHITE)
-        WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
+    SHOW_AVATAR_HEALTH = HEALTH_FONT.render("Health: " + str(shark_hp),1,WHITE)
+    WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
 
     pygame.display.update()
 
@@ -106,6 +106,8 @@ def main():
             counter += 1
         if counter % 30 == 0:
             vulnerable = True
+        
+
 
         # Scrolling background, resets background ahead if background hits fully offscreen
         for i in range(3):
