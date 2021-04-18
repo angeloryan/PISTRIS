@@ -95,18 +95,10 @@ def collision(shark, list):
 
         curr = curr.next
 
-#button vars
+# button vars
 # light shade of the button
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
-
-# stores the width of the
-# screen into a variable
-width = WIN.get_width()
-
-# stores the height of the
-# screen into a variable
-height = WIN.get_height()
 
 # defining a font
 smallfont = pygame.font.SysFont('Corbel', 35)
@@ -148,8 +140,8 @@ def main():
         while main_menu:
             # fills the screen with a color
             WIN.fill((37, 150, 190))
-            pygame.draw.rect(WIN, color_light, [width / 2 - 75, height / 2 , 140, 40])
-            WIN.blit(text, (width / 2 - 75, height / 2))
+            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 75, HEIGHT / 2 , 140, 40])
+            WIN.blit(text, (WIDTH / 2 - 75, HEIGHT / 2))
 
             # stores the (x,y) coordinates into
             # the variable as a tuple
@@ -158,7 +150,7 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.QUIT()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if width / 2 <= mouse[0] <= width / 2 + 140 and height / 2 <= mouse[1] <= height / 2 + 40:
+                    if WIDTH / 2 <= mouse[0] <= WIDTH / 2 + 140 and HEIGHT / 2 <= mouse[1] <= HEIGHT / 2 + 40:
                         main_menu = False
                 pygame.display.update()
 
