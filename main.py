@@ -19,12 +19,19 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
+SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygame.image.load(os.path.join('assets', 'splash_1.png')), 
+                pygame.image.load(os.path.join('assets', 'splash_2.png')), pygame.image.load(os.path.join('assets', 'splash_3.png'))]
 
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
 OCEAN = [0, 900 , 1800]
+SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
+          pygame.transform.scale(SPLASH_IMAGE[2], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[3], (100, 100))]
 
-def draw_window(list : LinkedList.LinkedList()):
+splash_stage = 0
+
+def draw_window(list : LinkedList.LinkedList(), shark, count, bob):
+    global splash_stage
     # WIN.blit(OCEAN_IMAGE, (0, 0))
     for i in range(3):
         WIN.blit(OCEAN_IMAGE, (OCEAN[i], 0))
@@ -33,17 +40,28 @@ def draw_window(list : LinkedList.LinkedList()):
 
     while curr:
         WIN.blit(curr.data.image, (curr.data.get_x(), curr.data.get_y()))
+        curr.data.set_x(-BACKGROUND_SPEED)
 
-        if curr.data.image is SHARK:
-            if curr.data.get_x() < 0:
-                curr.data.set_x(-BACKGROUND_SPEED)
-        else:
-            curr.data.set_x(-BACKGROUND_SPEED)
+        if curr.data.get_x() < -10:
+            curr.data.set_x(random.randint(10, 910) + WIDTH)
+            curr.data.hitbox.y = (random.randint(10, 450))
 
-            if curr.data.get_x() < -10:
-                curr.data.set_x(random.randint(10, 910) + WIDTH)
-                curr.data.hitbox.y = (random.randint(10, 450))
+        if count % 10 == 0:
+            if bob:
+                curr.data.set_y(-5)
+                bob = False
+            else:
+                curr.data.set_y(5)
+                bob = True
         curr = curr.next
+
+    WIN.blit(shark.image, (shark.get_x(), shark.get_y()))
+    WIN.blit(SPLASH[splash_stage // 7], (shark.get_x() - 55, shark.get_y()))
+
+    if splash_stage == 24:
+        splash_stage = 0
+    else:
+        splash_stage += 1
 
     pygame.display.update()
 
@@ -67,6 +85,7 @@ def collision(shark, list):
         if shark.hitbox.colliderect(curr.data.hitbox):
             pygame.event.post(pygame.event.Event(COLLISION))
             print("Hit!")
+            state = False
 
         curr = curr.next
 
@@ -74,20 +93,22 @@ def main():
     run = True
     shark_hp = 10
     time = 0
+    count = 0
+    bob = False
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
 
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
     for i in range(10):
-        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(300, 900), random.randint(10, 600), 10, 10)))
+        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(300, 900), random.randint(10, 500), 10, 10)))
 
-    list.push(shark)
     pygame.display.set_caption("PISTRIS")
 
     while run:
         clock.tick(FPS)
         time += 1
+        count += 1
 
         # Scrolling background, resets background ahead if background hits fully offscreen
         for i in range(3):
@@ -107,7 +128,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
         collision(shark, list)
-        draw_window(list)
+        draw_window(list, shark, count, bob)
 
     pygame.QUIT()
 
