@@ -1,27 +1,30 @@
-import pygame
-from pygame.locals import *
 import os
 import sprites
 import LinkedList
 import random
 import pygame
 import time
-pygame.font.init()
+import pygame
+from pygame.locals import *
+from pygame import mixer
 
-# Screen Variables
+pygame.font.init()
+pygame.init()
+
 os.environ['SDL_VIDEO_CENTERED'] = '1'
-WIDTH, HEIGHT = 900, 500
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-FPS = 60
-BACKGROUND_SPEED = 3
-PLAYER_SPEED = 5
 SHARK_WIDTH, SHARK_HEIGHT = 100, 100
 BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
-COLLISION = pygame.USEREVENT + 1
+WIDTH, HEIGHT = 900, 500
 SCREEN_COLOR = (150, 150, 255)
 WHITE = (255, 255, 255)
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+BACKGROUND_SPEED = 4
+PLAYER_SPEED = 5
+FPS = 60
+
+COLLISION = pygame.USEREVENT + 1
 HEALTH_FONT = pygame.font.SysFont('timesnewroman', 40)
+
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
@@ -29,21 +32,32 @@ OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
 SPLASH_IMAGE = [pygame.image.load(os.path.join('assets', 'splash_0.png')), pygame.image.load(os.path.join('assets', 'splash_1.png')), 
                 pygame.image.load(os.path.join('assets', 'splash_2.png')), pygame.image.load(os.path.join('assets', 'splash_3.png'))]
 
+OCEAN = [0, 900 , 1800]
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
-OCEAN = [0, 900 , 1800]
 SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[1], (100, 100)), 
           pygame.transform.scale(SPLASH_IMAGE[2], (100, 100)), pygame.transform.scale(SPLASH_IMAGE[3], (100, 100))]
 
 splash_stage = 0
 
+# button vars
+# light shade of the button
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
+
+# defining a font
+smallfont = pygame.font.SysFont('Corbel', 35)
+
+# rendering a text written in
+# this font
+text = smallfont.render('play', True, color_dark)
+
 def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
     global splash_stage
+    curr = list.head
 
     for i in range(3):
         WIN.blit(OCEAN_IMAGE, (OCEAN[i], 0))
-
-    curr = list.head
 
     while curr:
         WIN.blit(curr.data.image, (curr.data.get_x(), curr.data.get_y()))
@@ -60,6 +74,7 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
             else:
                 curr.data.set_y(5)
                 bob = True
+
         curr = curr.next
 
     WIN.blit(shark.image, (shark.get_x(), shark.get_y()))
@@ -99,19 +114,6 @@ def collision(shark, list, vulnerable):
 
         curr = curr.next
 
-# button vars
-# light shade of the button
-color_light = (170, 170, 170)
-color_dark = (100, 100, 100)
-
-# defining a font
-smallfont = pygame.font.SysFont('Corbel', 35)
-
-# rendering a text written in
-# this font
-text = smallfont.render('quit', True, color_dark)
-
-
 def main():
     run = True
     main_menu = True
@@ -123,22 +125,41 @@ def main():
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
     vulnerable = True
+    start = True
     
-    
-
-
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
     for i in range(10):
-        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(300, 900), random.randint(10, 500), 10, 10)))
+        list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(600, 1800), random.randint(10, 500), 10, 10)))
 
     pygame.display.set_caption("PISTRIS")
 
+    while main_menu:
+            # fills the screen with a color
+            WIN.blit(OCEAN_IMAGE, (0, 0))
+            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 75, HEIGHT / 2 - 45/2 , 140, 40])
+            WIN.blit(text, (WIDTH / 2 - 75/2, HEIGHT / 2 - 45/2))
+
+            # stores the (x,y) coordinates into
+            # the variable as a tuple
+            mouse = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.QUIT()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if WIDTH / 2 - 75 <= mouse[0] <= WIDTH / 2 and HEIGHT / 2 - 45/2 <= mouse[1] <= HEIGHT / 2:
+                        main_menu = False
+                pygame.display.update()
 
     while run:
         clock.tick(FPS)
         time += 1
         count += 1
+
+        if start:
+            mixer.music.load('Da_Music.mp3')
+            mixer.music.play(-1)
+            start = False
 
         if vulnerable is False:
             counter += 1
@@ -151,22 +172,6 @@ def main():
 
             if OCEAN[i] == -900:
                 OCEAN[i] = 1800
-        while main_menu:
-            # fills the screen with a color
-            WIN.fill((37, 150, 190))
-            pygame.draw.rect(WIN, color_light, [WIDTH / 2 - 75, HEIGHT / 2 , 140, 40])
-            WIN.blit(text, (WIDTH / 2 - 75, HEIGHT / 2))
-
-            # stores the (x,y) coordinates into
-            # the variable as a tuple
-            mouse = pygame.mouse.get_pos()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.QUIT()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if WIDTH / 2 <= mouse[0] <= WIDTH / 2 + 140 and HEIGHT / 2 <= mouse[1] <= HEIGHT / 2 + 40:
-                        main_menu = False
-                pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
