@@ -5,7 +5,7 @@ import os
 import sprites
 import LinkedList
 import random
-import pygame_menu
+import pygame
 import time
 pygame.font.init()
 
