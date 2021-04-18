@@ -8,7 +8,8 @@ import random
 # Screen Variables
 WIDTH, HEIGHT = 900, 500
 FPS = 60
-SPEED = 5
+BACKGROUND_SPEED = 3
+PLAYER_SPEED = 5
 SHARK_WIDTH, SHARK_HEIGHT = 100, 100
 BOTTLE_WIDTH, BOTTLE_HEIGHT = 10, 10
 COLLISION = pygame.USEREVENT + 1
@@ -19,13 +20,14 @@ SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
 OCEAN_IMAGE = pygame.image.load(os.path.join('assets', 'ocean.png'))
 
-
-# 1 = Up, 2 = Right, 3 = Down, 4 = Left
 SHARK = pygame.transform.scale(SHARK_IMAGE, (100, 100))
 BOTTLES = [BOTTLE_IMAGE, pygame.transform.rotate(BOTTLE_IMAGE, 90), pygame.transform.rotate(BOTTLE_IMAGE, 180), pygame.transform.rotate(BOTTLE_IMAGE, 270)]
+OCEAN = [0, 900 , 1800]
 
 def draw_window(list : LinkedList.LinkedList()):
-    WIN.blit(OCEAN_IMAGE, (0, 0))
+    # WIN.blit(OCEAN_IMAGE, (0, 0))
+    for i in range(3):
+        WIN.blit(OCEAN_IMAGE, (OCEAN[i], 0))
 
     curr = list.head
 
@@ -37,16 +39,16 @@ def draw_window(list : LinkedList.LinkedList()):
 
 def handle_avatar_movement(sprite: sprites.Sprites, keys_pressed):
     if keys_pressed[pygame.K_UP] and sprite.get_y() > 0:  # UP
-        sprite.set_y(-SPEED)
+        sprite.set_y(-PLAYER_SPEED)
 
     if keys_pressed[pygame.K_DOWN] and sprite.get_y() + sprite.hitbox.height < HEIGHT:  # DOWN
-        sprite.set_y(SPEED)
+        sprite.set_y(PLAYER_SPEED)
 
     if keys_pressed[pygame.K_LEFT] and sprite.get_x() > 0:  # LEFT
-        sprite.set_x(-SPEED)
+        sprite.set_x(-PLAYER_SPEED)
         
     if keys_pressed[pygame.K_RIGHT] and sprite.get_x() + sprite.hitbox.width < WIDTH:  # RIGHT
-        sprite.set_x(SPEED)
+        sprite.set_x(PLAYER_SPEED)
 
 def collision(shark, list):
     curr = list.head.next
@@ -61,6 +63,7 @@ def collision(shark, list):
 def main():
     run = True
     shark_hp = 10
+    time = 0
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
 
@@ -76,13 +79,20 @@ def main():
 
     while run:
         clock.tick(FPS)
+        time += 1
+
+        for i in range(3):
+            OCEAN[i] -= BACKGROUND_SPEED
+
+            if OCEAN[i] == -900:
+                OCEAN[i] = 1800
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == COLLISION:
                 shark_hp -= 1
         if shark_hp <= 0:
-            print("dead!")
             break
         
         keys_pressed = pygame.key.get_pressed()
