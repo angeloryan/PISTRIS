@@ -21,7 +21,7 @@ COLLISION = pygame.USEREVENT + 1
 SCREEN_COLOR = (150, 150, 255)
 WHITE = (255, 255, 255)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-HEALTH_FONT = pygame.font.SysFont('timesnewroman', 40)
+FONT = pygame.font.SysFont('timesnewroman', 40)
 
 SHARK_IMAGE = pygame.image.load(os.path.join('assets', 'shark.png'))
 BOTTLE_IMAGE = pygame.image.load(os.path.join('assets', 'water_bottle.png'))
@@ -37,7 +37,7 @@ SPLASH = [pygame.transform.scale(SPLASH_IMAGE[0], (100, 100)), pygame.transform.
 
 splash_stage = 0
 
-def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
+def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp, score):
     global splash_stage
 
     for i in range(3):
@@ -70,8 +70,10 @@ def draw_window(list : LinkedList.LinkedList(), shark, count, bob, shark_hp):
     else:
         splash_stage += 1
 
-    SHOW_AVATAR_HEALTH = HEALTH_FONT.render("Health: " + str(shark_hp),1,WHITE)
+    SHOW_AVATAR_HEALTH = FONT.render("Health: " + str(shark_hp), 1, WHITE)
     WIN.blit(SHOW_AVATAR_HEALTH, (10,10))
+    SHOW_SCORE = FONT.render("Score: " + str(score), 1, WHITE)
+    WIN.blit(SHOW_SCORE, (700, 10))
 
     pygame.display.update()
 
@@ -120,20 +122,18 @@ def main():
     count = 0
     bob = False
     counter = 0
+    score = 0
     clock = pygame.time.Clock()
     list = LinkedList.LinkedList()
     vulnerable = True
     
     
-
-
     shark = sprites.Sprites(SHARK, pygame.Rect(10, 300, SHARK_WIDTH, SHARK_HEIGHT))
 
     for i in range(10):
         list.push(sprites.Sprites(BOTTLES[random.randint(0, 3)], pygame.Rect(random.randint(300, 900), random.randint(10, 500), 10, 10)))
 
     pygame.display.set_caption("PISTRIS")
-
 
     while run:
         clock.tick(FPS)
@@ -144,7 +144,9 @@ def main():
             counter += 1
         if counter % 30 == 0:
             vulnerable = True
-        
+
+        if time % 25 == 0:
+            score += 1
 
 
         # Scrolling background, resets background ahead if background hits fully offscreen
@@ -182,7 +184,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
         handle_avatar_movement(shark, keys_pressed)
         collision(shark, list, vulnerable)
-        draw_window(list, shark, count, bob, shark_hp)
+        draw_window(list, shark, count, bob, shark_hp, score)
 
     pygame.QUIT()
 
